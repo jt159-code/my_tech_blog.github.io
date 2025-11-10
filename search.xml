@@ -4,50 +4,86 @@
   
     
     <entry>
-      <title></title>
-      <link href="/my_tech_blog.github.io/2025/11/10/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F_1/"/>
-      <url>/my_tech_blog.github.io/2025/11/10/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F_1/</url>
+      <title>Redis(一)</title>
+      <link href="/my_tech_blog.github.io/2025/11/09/Redis_1/"/>
+      <url>/my_tech_blog.github.io/2025/11/09/Redis_1/</url>
       
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/my_tech_blog.github.io/2025/11/10/Redis_1/"/>
-      <url>/my_tech_blog.github.io/2025/11/10/Redis_1/</url>
-      
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1>]]></content>
       
       
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/my_tech_blog.github.io/2025/11/10/%E6%95%B0%E6%8D%AE%E5%BA%93_1/"/>
-      <url>/my_tech_blog.github.io/2025/11/10/%E6%95%B0%E6%8D%AE%E5%BA%93_1/</url>
-      
-        <content type="html"><![CDATA[]]></content>
+      <categories>
+          
+          <category> Redis </category>
+          
+      </categories>
       
       
+        <tags>
+            
+            <tag> Redis </tag>
+            
+        </tags>
       
     </entry>
     
     
     
     <entry>
-      <title>计算机网络体系结构详解：OSI七层模型</title>
+      <title>数据库（一）</title>
+      <link href="/my_tech_blog.github.io/2025/11/09/%E6%95%B0%E6%8D%AE%E5%BA%93_1/"/>
+      <url>/my_tech_blog.github.io/2025/11/09/%E6%95%B0%E6%8D%AE%E5%BA%93_1/</url>
+      
+        <content type="html"><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 数据库 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>操作系统（一）</title>
+      <link href="/my_tech_blog.github.io/2025/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F_1/"/>
+      <url>/my_tech_blog.github.io/2025/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F_1/</url>
+      
+        <content type="html"><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> 操作系统 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 操作系统 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>计算机网络（一）：OSI七层模型</title>
       <link href="/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_1/"/>
       <url>/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_1/</url>
       
-        <content type="html"><![CDATA[<h1 id="计算机网络（一）：OSI七层模型"><a href="#计算机网络（一）：OSI七层模型" class="headerlink" title="计算机网络（一）：OSI七层模型"></a>计算机网络（一）：OSI七层模型</h1><h2 id="一、OSI七层网络参考模型"><a href="#一、OSI七层网络参考模型" class="headerlink" title="一、OSI七层网络参考模型"></a>一、OSI七层网络参考模型</h2><p>OSI（Open Systems Interconnection）参考模型是国际标准化组织提出的网络通信概念模型，将网络通信的工作分为7个层次。</p><h3 id="（1）应用层（Application-Layer）-第7层"><a href="#（1）应用层（Application-Layer）-第7层" class="headerlink" title="（1）应用层（Application Layer） - 第7层"></a>（1）应用层（Application Layer） - 第7层</h3><p><strong>作用</strong>：为应用程序提供网络服务接口，直接面向用户。</p><p><strong>主要功能</strong>：</p><ul><li>提供用户接口，支持各种网络服务</li><li>识别通信伙伴的身份和可用性</li><li>同步通信过程</li><li>错误恢复的约定</li></ul><p><strong>典型协议和服务</strong>：</p><ul><li>HTTP&#x2F;HTTPS：网页浏览</li><li>FTP：文件传输</li><li>SMTP&#x2F;POP3&#x2F;IMAP：电子邮件</li><li>DNS：域名解析</li><li>SSH：安全远程登录</li></ul><p><strong>数据单位</strong>：报文（Message）</p><h3 id="（2）表示层（Presentation-Layer）-第6层"><a href="#（2）表示层（Presentation-Layer）-第6层" class="headerlink" title="（2）表示层（Presentation Layer） - 第6层"></a>（2）表示层（Presentation Layer） - 第6层</h3><p><strong>作用</strong>：处理两个通信系统中交换信息的表示方式，确保不同系统能够理解彼此的数据。</p><p><strong>主要功能</strong>：</p><ul><li>数据格式转换（编码、解码）</li><li>数据加密和解密</li><li>数据压缩和解压缩</li><li>字符集转换</li></ul><p><strong>实际应用</strong>：</p><ul><li>JPEG、MPEG等多媒体格式处理</li><li>SSL&#x2F;TLS加密</li><li>ASCII与Unicode转换</li></ul><p><strong>数据单位</strong>：报文（Message）</p><h3 id="（3）会话层（Session-Layer）-第5层"><a href="#（3）会话层（Session-Layer）-第5层" class="headerlink" title="（3）会话层（Session Layer） - 第5层"></a>（3）会话层（Session Layer） - 第5层</h3><p><strong>作用</strong>：建立、管理和终止应用程序之间的会话连接。</p><p><strong>主要功能</strong>：</p><ul><li>建立、维护和终止会话</li><li>会话同步控制</li><li>对话控制（全双工、半双工）</li><li>故障恢复点设置</li></ul><p><strong>实际应用</strong>：</p><ul><li>RPC（远程过程调用）</li><li>NetBIOS会话管理</li><li>断点续传的会话管理</li></ul><p><strong>数据单位</strong>：报文（Message）</p><h3 id="（4）传输层（Transport-Layer）-第4层"><a href="#（4）传输层（Transport-Layer）-第4层" class="headerlink" title="（4）传输层（Transport Layer） - 第4层"></a>（4）传输层（Transport Layer） - 第4层</h3><p><strong>作用</strong>：为端到端通信提供可靠或不可靠的数据传输服务。</p><p><strong>主要功能</strong>：</p><ul><li>端到端的连接管理</li><li>流量控制</li><li>差错控制</li><li>数据分段和重组</li><li>多路复用和解复用</li></ul><p><strong>核心协议</strong>：</p><ul><li><strong>TCP</strong>：面向连接、可靠传输</li><li><strong>UDP</strong>：无连接、高效传输</li></ul><p><strong>数据单位</strong>：段（Segment）</p><h3 id="（5）网络层（Network-Layer）-第3层"><a href="#（5）网络层（Network-Layer）-第3层" class="headerlink" title="（5）网络层（Network Layer） - 第3层"></a>（5）网络层（Network Layer） - 第3层</h3><p><strong>作用</strong>：实现不同网络之间的数据包路由和转发。</p><p><strong>主要功能</strong>：</p><ul><li>逻辑寻址（IP地址）</li><li>路由选择</li><li>拥塞控制</li><li>分组转发</li></ul><p><strong>核心协议</strong>：</p><ul><li>IP（IPv4&#x2F;IPv6）</li><li>ICMP（网络控制消息）</li><li>OSPF、BGP（路由协议）</li></ul><p><strong>网络设备</strong>：路由器（Router）</p><p><strong>数据单位</strong>：包（Packet）</p><h3 id="（6）数据链路层（Data-Link-Layer）-第2层"><a href="#（6）数据链路层（Data-Link-Layer）-第2层" class="headerlink" title="（6）数据链路层（Data Link Layer） - 第2层"></a>（6）数据链路层（Data Link Layer） - 第2层</h3><p><strong>作用</strong>：在相邻节点之间提供可靠的数据帧传输。</p><p><strong>主要功能</strong>：</p><ul><li>物理寻址（MAC地址）</li><li>帧的封装和拆装</li><li>差错检测（CRC校验）</li><li>流量控制</li><li>介质访问控制</li></ul><p><strong>子层划分</strong>：</p><ul><li><strong>LLC</strong>：逻辑链路控制</li><li><strong>MAC</strong>：介质访问控制</li></ul><p><strong>网络设备</strong>：交换机（Switch）、网桥（Bridge）</p><p><strong>数据单位</strong>：帧（Frame）</p><h3 id="（7）物理层（Physical-Layer）-第1层"><a href="#（7）物理层（Physical-Layer）-第1层" class="headerlink" title="（7）物理层（Physical Layer） - 第1层"></a>（7）物理层（Physical Layer） - 第1层</h3><p><strong>作用</strong>：在物理介质上传输原始比特流。</p><p><strong>主要功能</strong>：</p><ul><li>定义机械、电气特性</li><li>比特同步</li><li>线路配置</li><li>数据传输模式</li></ul><p><strong>涉及内容</strong>：</p><ul><li>网线、光纤、无线信号</li><li>接口类型（RJ45、USB）</li><li>信号编码（曼彻斯特编码）</li><li>传输速率</li></ul><p><strong>数据单位</strong>：比特（Bit）</p><h2 id="二、数据封装过程"><a href="#二、数据封装过程" class="headerlink" title="二、数据封装过程"></a>二、数据封装过程</h2><p>数据在网络中传输时的封装过程：</p><pre><code class="text">应用层数据 → 表示层加密/压缩 → 会话层建立会话    ↓传输层添加TCP/UDP头部 → 网络层添加IP头部    ↓数据链路层添加帧头帧尾 → 物理层转换为比特流</code></pre>]]></content>
+        <content type="html"><![CDATA[<h1 id="计算机网络（一）：OSI七层模型"><a href="#计算机网络（一）：OSI七层模型" class="headerlink" title="计算机网络（一）：OSI七层模型"></a>计算机网络（一）：OSI七层模型</h1><h2 id="一、OSI七层网络参考模型"><a href="#一、OSI七层网络参考模型" class="headerlink" title="一、OSI七层网络参考模型"></a>一、OSI七层网络参考模型</h2><p>OSI（Open Systems Interconnection）参考模型是国际标准化组织提出的网络通信概念模型，将网络通信的工作分为7个层次。</p><h3 id="（1）应用层（Application-Layer）-第7层"><a href="#（1）应用层（Application-Layer）-第7层" class="headerlink" title="（1）应用层（Application Layer） - 第7层"></a>（1）应用层（Application Layer） - 第7层</h3><p><strong>作用</strong>：为应用程序提供网络服务接口，直接面向用户。</p><p><strong>主要功能</strong>：</p><ul><li>提供用户接口，支持各种网络服务</li><li>识别通信伙伴的身份和可用性</li><li>同步通信过程</li><li>错误恢复的约定</li></ul><p><strong>典型协议和服务</strong>：</p><ul><li>HTTP&#x2F;HTTPS：网页浏览</li><li>FTP：文件传输</li><li>SMTP&#x2F;POP3&#x2F;IMAP：电子邮件</li><li>DNS：域名解析</li><li>SSH：安全远程登录</li></ul><p><strong>数据单位</strong>：报文（Message）</p><h3 id="（2）表示层（Presentation-Layer）-第6层"><a href="#（2）表示层（Presentation-Layer）-第6层" class="headerlink" title="（2）表示层（Presentation Layer） - 第6层"></a>（2）表示层（Presentation Layer） - 第6层</h3><p><strong>作用</strong>：处理两个通信系统中交换信息的表示方式，确保不同系统能够理解彼此的数据。</p><p><strong>主要功能</strong>：</p><ul><li>数据格式转换（编码、解码）</li><li>数据加密和解密</li><li>数据压缩和解压缩</li><li>字符集转换</li></ul><p><strong>实际应用</strong>：</p><ul><li>JPEG、MPEG等多媒体格式处理</li><li>SSL&#x2F;TLS加密</li><li>ASCII与Unicode转换</li></ul><p><strong>数据单位</strong>：报文（Message）</p><h3 id="（3）会话层（Session-Layer）-第5层"><a href="#（3）会话层（Session-Layer）-第5层" class="headerlink" title="（3）会话层（Session Layer） - 第5层"></a>（3）会话层（Session Layer） - 第5层</h3><p><strong>作用</strong>：建立、管理和终止应用程序之间的会话连接。</p><p><strong>主要功能</strong>：</p><ul><li>建立、维护和终止会话</li><li>会话同步控制</li><li>对话控制（全双工、半双工）</li><li>故障恢复点设置</li></ul><p><strong>实际应用</strong>：</p><ul><li>RPC（远程过程调用）</li><li>NetBIOS会话管理</li><li>断点续传的会话管理</li></ul><p><strong>数据单位</strong>：报文（Message）</p><h3 id="（4）传输层（Transport-Layer）-第4层"><a href="#（4）传输层（Transport-Layer）-第4层" class="headerlink" title="（4）传输层（Transport Layer） - 第4层"></a>（4）传输层（Transport Layer） - 第4层</h3><p><strong>作用</strong>：为端到端通信提供可靠或不可靠的数据传输服务。</p><p><strong>主要功能</strong>：</p><ul><li>端到端的连接管理</li><li>流量控制</li><li>差错控制</li><li>数据分段和重组</li><li>多路复用和解复用</li></ul><p><strong>核心协议</strong>：</p><ul><li><strong>TCP</strong>：面向连接、可靠传输</li><li><strong>UDP</strong>：无连接、高效传输</li></ul><p><strong>数据单位</strong>：段（Segment）</p><h3 id="（5）网络层（Network-Layer）-第3层"><a href="#（5）网络层（Network-Layer）-第3层" class="headerlink" title="（5）网络层（Network Layer） - 第3层"></a>（5）网络层（Network Layer） - 第3层</h3><p><strong>作用</strong>：实现不同网络之间的数据包路由和转发。</p><p><strong>主要功能</strong>：</p><ul><li>逻辑寻址（IP地址）</li><li>路由选择</li><li>拥塞控制</li><li>分组转发</li></ul><p><strong>核心协议</strong>：</p><ul><li>IP（IPv4&#x2F;IPv6）</li><li>ICMP（网络控制消息）</li><li>OSPF、BGP（路由协议）</li></ul><p><strong>网络设备</strong>：路由器（Router）</p><p><strong>数据单位</strong>：包（Packet）</p><h3 id="（6）数据链路层（Data-Link-Layer）-第2层"><a href="#（6）数据链路层（Data-Link-Layer）-第2层" class="headerlink" title="（6）数据链路层（Data Link Layer） - 第2层"></a>（6）数据链路层（Data Link Layer） - 第2层</h3><p><strong>作用</strong>：在相邻节点之间提供可靠的数据帧传输。</p><p><strong>主要功能</strong>：</p><ul><li>物理寻址（MAC地址）</li><li>帧的封装和拆装</li><li>差错检测（CRC校验）</li><li>流量控制</li><li>介质访问控制</li></ul><p><strong>子层划分</strong>：</p><ul><li><strong>LLC</strong>：逻辑链路控制</li><li><strong>MAC</strong>：介质访问控制</li></ul><p><strong>网络设备</strong>：交换机（Switch）、网桥（Bridge）</p><p><strong>数据单位</strong>：帧（Frame）</p><h3 id="（7）物理层（Physical-Layer）-第1层"><a href="#（7）物理层（Physical-Layer）-第1层" class="headerlink" title="（7）物理层（Physical Layer） - 第1层"></a>（7）物理层（Physical Layer） - 第1层</h3><p><strong>作用</strong>：在物理介质上传输原始比特流。</p><p><strong>主要功能</strong>：</p><ul><li>定义机械、电气特性</li><li>比特同步</li><li>线路配置</li><li>数据传输模式</li></ul><p><strong>涉及内容</strong>：</p><ul><li>网线、光纤、无线信号</li><li>接口类型（RJ45、USB）</li><li>信号编码（曼彻斯特编码）</li><li>传输速率</li></ul><p><strong>数据单位</strong>：比特（Bit）</p><h2 id="二、数据封装过程"><a href="#二、数据封装过程" class="headerlink" title="二、数据封装过程"></a>二、数据封装过程</h2><p>数据在网络中传输时的封装过程：</p><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">应用层数据 → 表示层加密/压缩 → 会话层建立会话</span><br><span class="line">    ↓</span><br><span class="line">传输层添加TCP/UDP头部 → 网络层添加IP头部</span><br><span class="line">    ↓</span><br><span class="line">数据链路层添加帧头帧尾 → 物理层转换为比特流</span><br></pre></td></tr></table></figure>]]></content>
       
       
       <categories>
