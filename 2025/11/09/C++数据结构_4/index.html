@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++数据结构(四)：从代码到程序 | 技术博客</title><meta name="author" content="JT"><meta name="copyright" content="JT"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="C++数据结构（四）：从代码到程序一、C++从代码到可执行程序经历了什么1、预处理&#x2F;预编译处理宏定义、预编译指令（头文件的包含是递归的）、保留编译器指令，添加行号和文件标识、删除所有注释 生成.i、.ii 2、编译词法分析、语法分析、语义分析、优化、目标代码生成、目标代码分析 生成汇编代码文件.s 3、汇编变为机器码文件.o、.obj（可重定位目标文件，并不是可执行文件，可执行文件在链接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++数据结构(四)：从代码到程序">
+<meta property="og:url" content="https://jt159-code.github.io/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_4/index.html">
+<meta property="og:site_name" content="技术博客">
+<meta property="og:description" content="C++数据结构（四）：从代码到程序一、C++从代码到可执行程序经历了什么1、预处理&#x2F;预编译处理宏定义、预编译指令（头文件的包含是递归的）、保留编译器指令，添加行号和文件标识、删除所有注释 生成.i、.ii 2、编译词法分析、语法分析、语义分析、优化、目标代码生成、目标代码分析 生成汇编代码文件.s 3、汇编变为机器码文件.o、.obj（可重定位目标文件，并不是可执行文件，可执行文件在链接">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jt159-code.github.io/my_tech_blog.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-11-08T16:00:04.000Z">
+<meta property="article:modified_time" content="2025-11-10T11:34:26.592Z">
+<meta property="article:author" content="JT">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="可执行程序">
+<meta property="article:tag" content="main">
+<meta property="article:tag" content="压栈">
+<meta property="article:tag" content="内存">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jt159-code.github.io/my_tech_blog.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C++数据结构(四)：从代码到程序",
+  "url": "https://jt159-code.github.io/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_4/",
+  "image": "https://jt159-code.github.io/my_tech_blog.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-11-08T16:00:04.000Z",
+  "dateModified": "2025-11-10T11:34:26.592Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "JT",
+      "url": "https://jt159-code.github.io/my_tech_blog.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/my_tech_blog.github.io/img/favicon.png"><link rel="canonical" href="https://jt159-code.github.io/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/my_tech_blog.github.io/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/my_tech_blog.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++数据结构(四)：从代码到程序',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style>
+  /* 全局字体大小调整 */
+  body {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  
+  /* 文章内容字体调整 */
+  .article-content {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  
+  /* 标题字体大小调整 */
+  h1 {
+    font-size: 2.2em;
+  }
+  h2 {
+    font-size: 1.8em;
+  }
+  h3 {
+    font-size: 1.5em;
+  }
+  h4 {
+    font-size: 1.3em;
+  }
+  h5 {
+    font-size: 1.1em;
+  }
+  h6 {
+    font-size: 1em;
+  }
+  
+  /* 代码块样式 - 去除高亮，使用简单样式 */
+  pre, code {
+    background: #f8f9fa !important;
+    color: #333 !important;
+    border: 1px solid #e9ecef !important;
+    font-size: 15px !important;
+  }
+  
+  /* 侧边栏目录样式调整 */
+  #aside-content .toc-content {
+    font-size: 14px;
+  }
+  #aside-content .toc-content .toc-item {
+    margin: 4px 0;
+  }
+</style>
+<meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/my_tech_blog.github.io/./img/bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/my_tech_blog.github.io/"><span class="site-name">技术博客</span></a><a class="nav-page-title" href="/my_tech_blog.github.io/"><span class="site-name">C++数据结构(四)：从代码到程序</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">C++数据结构(四)：从代码到程序</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-08T16:00:04.000Z" title="发表于 2025-11-09 00:00:04">2025-11-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-10T11:34:26.592Z" title="更新于 2025-11-10 19:34:26">2025-11-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/my_tech_blog.github.io/categories/C/">C++</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="C-数据结构（四）：从代码到程序"><a href="#C-数据结构（四）：从代码到程序" class="headerlink" title="C++数据结构（四）：从代码到程序"></a>C++数据结构（四）：从代码到程序</h1><h2 id="一、C-从代码到可执行程序经历了什么"><a href="#一、C-从代码到可执行程序经历了什么" class="headerlink" title="一、C++从代码到可执行程序经历了什么"></a>一、C++从代码到可执行程序经历了什么</h2><h3 id="1、预处理-预编译"><a href="#1、预处理-预编译" class="headerlink" title="1、预处理&#x2F;预编译"></a>1、预处理&#x2F;预编译</h3><p>处理宏定义、预编译指令（头文件的包含是递归的）、保留编译器指令，添加行号和文件标识、删除所有注释</p>
+<p>生成.i、.ii</p>
+<h3 id="2、编译"><a href="#2、编译" class="headerlink" title="2、编译"></a>2、编译</h3><p>词法分析、语法分析、语义分析、优化、目标代码生成、目标代码分析</p>
+<p>生成汇编代码文件.s</p>
+<h3 id="3、汇编"><a href="#3、汇编" class="headerlink" title="3、汇编"></a>3、汇编</h3><p>变为机器码文件.o、.obj（可重定位目标文件，并不是可执行文件，可执行文件在链接后生成）</p>
+<h6 id="可重定位目标文件"><a href="#可重定位目标文件" class="headerlink" title="可重定位目标文件"></a>可重定位目标文件</h6><p>可重定位目标文件是链接过程的输入</p>
+<p>可与其它可重定位目标文件链接，创建一个可执行目标文件</p>
+<h3 id="4、链接"><a href="#4、链接" class="headerlink" title="4、链接"></a>4、链接</h3><p>将不同源文件生成的目标文件进行链接，生成可以执行的程序</p>
+<p>可以通过检查依赖项或者查看文件大小，静态无依赖且文件较大</p>
+<h4 id="（1）静态链接（-a-lib）"><a href="#（1）静态链接（-a-lib）" class="headerlink" title="（1）静态链接（.a&#x2F;.lib）"></a>（1）静态链接（.a&#x2F;.lib）</h4><p>在形成进行可执行程序时链接，以目标文件为单位</p>
+<p>在编译链接可执行文件时，将程序运行所需要的所有目标文件（如库直接插入到代码）链接</p>
+<p>缺点：（空间浪费）内存消耗大，可能存在多个副本；（更新困难）当代码库文件修改了，需要重新编译链接形成可执行文件</p>
+<p>优点：运行速度快</p>
+<p>用途：完全独立运行</p>
+<h4 id="（2）动态链接（-so-dll）"><a href="#（2）动态链接（-so-dll）" class="headerlink" title="（2）动态链接（.so&#x2F;.dll）"></a>（2）动态链接（.so&#x2F;.dll）</h4><p>在生成可执行程序时链接，在运行时由动态链接器加载所需动态库到内存</p>
+<p>把程序按照模块进行拆分，在程序运行时才将它们进行链接</p>
+<p>优点：共享库，不会存在多个副本；更新方便：只需要替换原来的目标文件</p>
+<p>缺点：性能有损失；如果转发需要携带动态链接库，没有运行库无法运行</p>
+<p>用途：灵活升级功能、依赖系统通用库、多个程序共享一库</p>
+<p><img src="C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20250318215856125.png" alt="image-20250318215856125"></p>
+<h3 id="5、程序"><a href="#5、程序" class="headerlink" title="5、程序"></a>5、程序</h3><h4 id="（1）可执行目标文件"><a href="#（1）可执行目标文件" class="headerlink" title="（1）可执行目标文件"></a>（1）可执行目标文件</h4><p>可以直接在内存中执行</p>
+<ul>
+<li><strong>Windows</strong>：<strong>严重依赖文件后缀名</strong>来判断一个文件是否为可执行文件。(.exe)</li>
+<li><strong>Linux</strong>：<strong>不依赖文件后缀名</strong>，而是通过文件的<strong>权限属性</strong>来判断。(<strong>ELF</strong>：这是现代 Linux 系统中最主流的可执行文件格式；可执行的Shell脚本)</li>
+</ul>
+<h4 id="（2）共享目标文件（动态链接库-so、-dll）"><a href="#（2）共享目标文件（动态链接库-so、-dll）" class="headerlink" title="（2）共享目标文件（动态链接库.so、.dll）"></a>（2）共享目标文件（动态链接库.so、.dll）</h4><p>特殊可重定位目标文件，客栈运行时被动态加载进内存并链接</p>
+<h3 id="6、运行"><a href="#6、运行" class="headerlink" title="6、运行"></a>6、运行</h3><p>操作系统将可执行文件加载到内存并运行</p>
+<h3 id="7、问题"><a href="#7、问题" class="headerlink" title="7、问题"></a>7、问题</h3><h4 id="（1）将字符串“hello-world”从开始到打印到屏幕的全过程"><a href="#（1）将字符串“hello-world”从开始到打印到屏幕的全过程" class="headerlink" title="（1）将字符串“hello world”从开始到打印到屏幕的全过程"></a>（1）将字符串“hello world”从开始到打印到屏幕的全过程</h4><p>用户告诉操作系统需要运行程序-&gt;操作系统：查看程序是否是可执行文件；读取程首部信息，得到程序的数据和代码在可执行文件中位置并计算出对应磁盘块地址-&gt;操作系统：新建进程，将可执行文件映射到进程-&gt;操作系统：设置cpu上下文环境，跳到程序开始-&gt;执行第一条指令，缺页异常-&gt;操作系统分配物理页，将代码从磁盘读到内存，继续执行-&gt;执行puts函数（系统调用），在显示器显示字符串-&gt;操作系统：找到要进行显示的设备，将字符串传给负责该设备的进程-&gt;操作系统：进程告诉设备的系统窗口，要显示字符串，系统窗口检查这是一个合法操作，将字符串转化为像素，将像素写入设备的存储映像区-&gt;视频硬件将像素转换成显示器可接受和一组数据控制数据信号-&gt;显示器解释信号，激发液晶屏-&gt;看到</p>
+<h4 id="（2）什么在编译时得到，什么在运行时得到"><a href="#（2）什么在编译时得到，什么在运行时得到" class="headerlink" title="（2）什么在编译时得到，什么在运行时得到"></a>（2）什么在编译时得到，什么在运行时得到</h4><img src="C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20250313113640796.png" alt="image-20250313113640796" style="zoom:50%;" />
+
+<h2 id="二、main"><a href="#二、main" class="headerlink" title="二、main"></a>二、main</h2><h3 id="1、什么操作在main函数之前、之后进行"><a href="#1、什么操作在main函数之前、之后进行" class="headerlink" title="1、什么操作在main函数之前、之后进行"></a>1、什么操作在main函数之前、之后进行</h3><p>宏定义包含在预处理阶段（宏、头文件包含（#include）、条件编译（#ifdef）），不在程序运行的编译阶段</p>
+<h4 id="（1）前"><a href="#（1）前" class="headerlink" title="（1）前"></a>（1）前</h4><p>栈指针、类、全局变量（全局变量、静态全局变量、全局对象的构造函数；加载初始值.data和初始化.bss）、main的参数（argv、argc）的传递会在main函数之前进行；静态变量分配内存</p>
+<h4 id="（2）后"><a href="#（2）后" class="headerlink" title="（2）后"></a>（2）后</h4><p>全局对象的析构函数会在main函数之后进行</p>
+<h4 id="（3）问题"><a href="#（3）问题" class="headerlink" title="（3）问题"></a>（3）问题</h4><h5 id="①在main函数中定义static变量，是先运行main函数还是先初始化static变量"><a href="#①在main函数中定义static变量，是先运行main函数还是先初始化static变量" class="headerlink" title="①在main函数中定义static变量，是先运行main函数还是先初始化static变量"></a>①在main函数中定义static变量，是先运行main函数还是先初始化static变量</h5><p>如果是类的static成员或在main函数前定义的（全局静态变量），是在main函数执行前完成；但是如果是在main函数中定义的static（局部静态变量）对象，会先进入main再进行初始化，但是在程序启动时（main函数执行之前，运行时）分配内存（静态存储区）。</p>
+<h3 id="2、程序在执行int-main-int-argc-char-argv-时的内存结构"><a href="#2、程序在执行int-main-int-argc-char-argv-时的内存结构" class="headerlink" title="2、程序在执行int main(int argc,char*argv[])时的内存结构"></a>2、程序在执行int main(int argc,char*argv[])时的内存结构</h3><p>程序在命令下运行时，需要输入argc个参数，每个参数都是以char类型输入的，依次存储在数组argv[]中，第一个参数为程序的名称</p>
+<h3 id="3、main函数的返回值"><a href="#3、main函数的返回值" class="headerlink" title="3、main函数的返回值"></a>3、main函数的返回值</h3><p>必须是int才能传递给程序激活值（如操作系统）表示程序正常退出</p>
+<h4 id="（1）非main函数将临时变量作为返回值"><a href="#（1）非main函数将临时变量作为返回值" class="headerlink" title="（1）非main函数将临时变量作为返回值"></a>（1）非main函数将临时变量作为返回值</h4><p>当函数退出，临时变量出栈被销毁，但是返回值被临时存储到寄存器中与临时变量的生命周期没有关系</p>
+<h2 id="三、压栈"><a href="#三、压栈" class="headerlink" title="三、压栈"></a>三、压栈</h2><h3 id="1、C-函数调用的压栈过程"><a href="#1、C-函数调用的压栈过程" class="headerlink" title="1、C++函数调用的压栈过程"></a>1、C++函数调用的压栈过程</h3><h4 id="（1）根据程序main调用fun运行print-f-f"><a href="#（1）根据程序main调用fun运行print-f-f" class="headerlink" title="（1）根据程序main调用fun运行print(f(),f())"></a>（1）根据程序main调用fun运行print(f(),f())</h4><p>从main开始执行-&gt;编译器将操作系统的运行状态、main函数的返回地址、main函数的参数、main函数的变量（先定义先入栈）进行依次压栈；</p>
+<p>调用fun函数-&gt;fun的参数（从右往左）、fun的返回地址、main的栈底地址和栈顶地址（栈顶地址（SP）是由硬件自动管理的，通常不需要显式保存）、fun函数的变量依次压栈</p>
+<p>调用f函数-&gt;f函数的参数（从右往左）、f函数的返回地址、f函数的变量依次压栈（printf中调用两次，如果是常数从右往左压栈，但是如果是表达式则求值顺序不确定，这里是从左往右）</p>
+<ul>
+<li><strong>运行状态</strong>：通常由调用约定决定是否需要显式保存寄存器状态，而不是直接压栈。</li>
+</ul>
+<h4 id="（2）文字描述"><a href="#（2）文字描述" class="headerlink" title="（2）文字描述"></a>（2）文字描述</h4><p>栈空间分配存储空间</p>
+<p>从实参的存储空间复制到形参空间</p>
+<p>进行运算</p>
+<h2 id="四、内存"><a href="#四、内存" class="headerlink" title="四、内存"></a>四、内存</h2><h3 id="1、内存分区-内存管理"><a href="#1、内存分区-内存管理" class="headerlink" title="1、内存分区&#x2F;内存管理"></a>1、内存分区&#x2F;内存管理</h3><p>栈</p>
+<p>堆</p>
+<p>全局&#x2F;静态数据区：全局变量和静态变量（包括初始化和未初始化）</p>
+<p>常量区</p>
+<p>代码区</p>
+<h4 id="（1）栈和堆的区别"><a href="#（1）栈和堆的区别" class="headerlink" title="（1）栈和堆的区别"></a>（1）栈和堆的区别</h4><p>栈存在静态分配（编译器分配）和动态分配（alloc），编译器自动释放，空间是连续的，向栈底扩展（从内存的高地址向低地址生长），系统提供，速度快；</p>
+<p>堆是程序员自己申请的，需要自己释放，只有动态分配，空间是不连续的，会生成碎片，向高地址扩展，是C&#x2F;C++函数库，效率低</p>
+<h5 id="①哪个快一点"><a href="#①哪个快一点" class="headerlink" title="①哪个快一点"></a>①哪个快一点</h5><p>栈更快。栈是操作系统在底层提供支持，有专门的寄存器和执行指令；堆是C&#x2F;C++函数库提供的，且需要访问两次内存（一次访问指针，一次找到指针所指的地址）</p>
+<h5 id="②哪个建立对象更快"><a href="#②哪个建立对象更快" class="headerlink" title="②哪个建立对象更快"></a>②哪个建立对象更快</h5><p>堆需要调用函数</p>
+<p>访问堆的一个单元要经历两次访存，栈只进行一次</p>
+<h3 id="2、类的对象存储空间"><a href="#2、类的对象存储空间" class="headerlink" title="2、类的对象存储空间"></a>2、类的对象存储空间</h3><p>非静态成员数据类型大小之和（包括基类）+编译器额外加入的成员变量（如指向虚函数表的指针）+为了边缘对齐优化加入的padding（成员函数不占用对象内存（放在代码区包括静态函数））</p>
+<h4 id="（1）空类"><a href="#（1）空类" class="headerlink" title="（1）空类"></a>（1）空类</h4><p>空类（无非静态数据成员）的对象size&#x3D;1，当作为基类size&#x3D;0，有虚函数大小根据虚函数指针确定</p>
+<p>空类同样可以实例化，类对象大小和类大小相同，但是地址不同，类指针大小等于指针大小（4字节）</p>
+<h3 id="3、内存池"><a href="#3、内存池" class="headerlink" title="3、内存池"></a>3、内存池</h3><p>内存分配方式，避免new、malloc由于内存分配大小不确定导致的内存碎片，封装malloc、free在真正使用内存前先分配一定数量的、大小相等的内存块</p>
+<h3 id="4、动态内存申请（malloc-calloc-new）"><a href="#4、动态内存申请（malloc-calloc-new）" class="headerlink" title="4、动态内存申请（malloc, calloc, new）"></a>4、动态内存申请（malloc, calloc, new）</h3><p>都是在堆</p>
+<h4 id="（1）分配虚拟内存空间和物理内存空间"><a href="#（1）分配虚拟内存空间和物理内存空间" class="headerlink" title="（1）分配虚拟内存空间和物理内存空间"></a>（1）分配虚拟内存空间和物理内存空间</h4><h5 id="①malloc"><a href="#①malloc" class="headerlink" title="①malloc"></a>①malloc</h5><p>手动计算内存大小</p>
+<p>malloc&#x2F;ˈmælɒk&#x2F;动态申请内存时（没有进行初始化），操作系统会分配虚拟内存（虚拟内存通过页表映射到物理内存），但是并没有分配物理内存，当程序访问虚拟内存时，会触发“缺页”异常，于是才会进行物理内存的分配，这种分配方式称为“按需分页”</p>
+<p>brk、mmap、munmap系统调用</p>
+<p>brk将堆顶指针向高地址移动，扩大程序在运行时的堆大小（小于128k），mmap在进程的虚拟内存地址空间中找一块空闲的虚拟内存，获得一块可以操作的堆内存（大于128k）。</p>
+<p>在第一次访问已分配的虚拟地址空间时，发生缺页中断，操作系统负责分配物理内存，建立虚拟内存和物理内存之间的映射关系</p>
+<h5 id="②new"><a href="#②new" class="headerlink" title="②new"></a>②new</h5><p><img src="C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20250315181709938.png" alt="image-20250315181709938"></p>
+<h5 id="③calloc"><a href="#③calloc" class="headerlink" title="③calloc"></a>③calloc</h5><p>Calloc&#x2F;ˈkælɒk&#x2F;动态申请内存时，会直接进行初始化为0，所以会直接分配虚拟内存和物理内存，这也导致分配过程较慢</p>
+<p>省去了人为计算空间</p>
+<h5 id="④realloc"><a href="#④realloc" class="headerlink" title="④realloc"></a>④realloc</h5><p>给动态分配的空间分配额外的空间，用于扩充</p>
+<h4 id="（2）malloc-free和new-delete的区别"><a href="#（2）malloc-free和new-delete的区别" class="headerlink" title="（2）malloc&#x2F;free和new&#x2F;delete的区别"></a>（2）malloc&#x2F;free和new&#x2F;delete的区别</h4><p>Malloc是C语言标准库函数，支持覆盖，需要库文件，不调用构造函数，不是类型安全的，返回的是void类型的指针，需要强制类型转换，需要计算内存分配大小，动态申请和释放，无法强制要求构造和析构</p>
+<p>new是C++操作符（关键字），支持重载，自动调用构造函数，是类型安全的，返回具体类型的指针，自动分配内存大小（无需指出所需内存大小），new封装了malloc可以使用free但是仅仅是析构，没有释放内存</p>
+<h4 id="（3）new、delete是如何实现的"><a href="#（3）new、delete是如何实现的" class="headerlink" title="（3）new、delete是如何实现的"></a>（3）new、delete是如何实现的</h4><p>复杂结构，New通过调用标准库函数分配内存，在分配的内存上调用对象的构造函数进行初始化，最后返回指向这个新创建对象的指针；</p>
+<p>简单类型，new[]计算好大小后调用operate new</p>
+<p>复杂类型：Delete调用析构函数，然后调用标准库函数释放内存</p>
+<p>简单类型：delete默认调用free</p>
+<h4 id="（4）为什么要有new-delete"><a href="#（4）为什么要有new-delete" class="headerlink" title="（4）为什么要有new&#x2F;delete"></a>（4）为什么要有new&#x2F;delete</h4><p>对非基本类型使用时，需要调用构造函数和析构函数，但是malloc是库函数，是已经编译的，不能把构造函数和析构函数强加（它在编译好的二进制库中（如 libc.so 或 msvcrt.dll），无法在运行时动态插入 C++ 的构造&#x2F;析构逻辑）</p>
+<h4 id="（5）被free掉的空间是直接返还给内存吗"><a href="#（5）被free掉的空间是直接返还给内存吗" class="headerlink" title="（5）被free掉的空间是直接返还给内存吗"></a>（5）被free掉的空间是直接返还给内存吗</h4><p>不是，是先用双链表（尝试对小内存进行合并，避免碎片）存储，下一次需要分配空间时，会先从这些空间里查询是否有符合条件的空间</p>
+<h4 id="（6）C-中有几种方式的new"><a href="#（6）C-中有几种方式的new" class="headerlink" title="（6）C++中有几种方式的new"></a>（6）C++中有几种方式的new</h4><h5 id="①explain"><a href="#①explain" class="headerlink" title="①explain"></a>①explain</h5><p>默认，失败返回bad_alloc异常</p>
+<h5 id="②nothrow"><a href="#②nothrow" class="headerlink" title="②nothrow"></a>②nothrow</h5><p>失败返回NULL</p>
+<h5 id="③placement"><a href="#③placement" class="headerlink" title="③placement"></a>③placement</h5><p>允许在一块已经成功分配的内存上重新构造对象或对象数组（反复使用一块较大的动态分配的内存），不分配内存</p>
+<p>要显示调用析构函数，不要delete</p>
+<h4 id="（7）delete-p、delete-p、allocator都有什么作用"><a href="#（7）delete-p、delete-p、allocator都有什么作用" class="headerlink" title="（7）delete p、delete[]p、allocator都有什么作用"></a>（7）delete p、delete[]p、allocator都有什么作用</h4><p>动态数组中[]里必须是整数，但可以不是常量，普通数组中必须是常数整数</p>
+<p>new动态数组返回的并不是数组类型，而是一个元素类型的指针</p>
+<p>delete[]按数组逆序的顺序进行销毁，调用数组中每个元素的析构函数；new时分配了4字节大小存储数组大小delete[]调出</p>
+<p>allocator申请一部分内存，在需要时手动调用构造函数、析构函数</p>
+<h4 id="（8）什么是内存泄露，如何检测与避免"><a href="#（8）什么是内存泄露，如何检测与避免" class="headerlink" title="（8）什么是内存泄露，如何检测与避免"></a>（8）什么是内存泄露，如何检测与避免</h4><p>堆内存泄露，使用后必须显式释放，否则这块内存就不能再被使用</p>
+<p>后果：只发生一次小的内存泄露可能不被注意，但是当大量内存泄露，性能下降到内存逐渐用完，导致另一个程序失败</p>
+<h5 id="①避免"><a href="#①避免" class="headerlink" title="①避免"></a>①避免</h5><p>计数：分配+1，释放-1-&gt;成对出现</p>
+<p>基类析构函数声明为虚函数（否则静态绑定，使用基类指针删除派生类对象时，只会调用基类析构函数，不会调用派生类析构函数，可以是纯虚函数（变成抽象类，不能实例化））</p>
+<p>数组要delete[]</p>
+<p>遵循RAII原则，资源获取即初始化，资源释放即析构，通过对象的声明周期管理资源</p>
+<p>智能指针，避免手动管理内存</p>
+<h5 id="②检测工具"><a href="#②检测工具" class="headerlink" title="②检测工具"></a>②检测工具</h5><p>Linux用Valgrind&#x2F;ˈvælɡrɪnd&#x2F;；Windows用CRT库</p>
+<h4 id="（9）类如何实现只能静态分配或动态分配"><a href="#（9）类如何实现只能静态分配或动态分配" class="headerlink" title="（9）类如何实现只能静态分配或动态分配"></a>（9）类如何实现只能静态分配或动态分配</h4><h5 id="①静态"><a href="#①静态" class="headerlink" title="①静态"></a>①静态</h5><p>把new、delete重载为private</p>
+<h5 id="②动态"><a href="#②动态" class="headerlink" title="②动态"></a>②动态</h5><p>把构造、析构设为protected然后再用子类动态创建</p>
+<h5 id="③建立类的对象有两种方式"><a href="#③建立类的对象有两种方式" class="headerlink" title="③建立类的对象有两种方式"></a>③建立类的对象有两种方式</h5><p>静态：编译器在栈上分配内存</p>
+<p>动态：new（内存-&gt;构造函数）在堆</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://jt159-code.github.io/my_tech_blog.github.io">JT</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jt159-code.github.io/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_4/">https://jt159-code.github.io/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://jt159-code.github.io/my_tech_blog.github.io" target="_blank">技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/my_tech_blog.github.io/tags/C/">C++</a><a class="post-meta__tags" href="/my_tech_blog.github.io/tags/%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F/">可执行程序</a><a class="post-meta__tags" href="/my_tech_blog.github.io/tags/main/">main</a><a class="post-meta__tags" href="/my_tech_blog.github.io/tags/%E5%8E%8B%E6%A0%88/">压栈</a><a class="post-meta__tags" href="/my_tech_blog.github.io/tags/%E5%86%85%E5%AD%98/">内存</a></div><div class="post-share"><div class="social-share" data-image="/my_tech_blog.github.io/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_5/" title="C++数据结构(五)：关键字"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">C++数据结构(五)：关键字</div></div><div class="info-2"><div class="info-item-1">C++数据结构（五）：关键字static和const；override和final；extern；public&#x2F;private&#x2F;protect；volatile&#x2F;mutable&#x2F;explicit 一、static所有对象共有的；可以直接使用类名调用；在对象构建之前，与类（类变量，普通称为实例变量）一起构建，仅在类加载时执行；生命周期与类相同（普通成员变量与对象相同）；地址在方法区的静态区（普通在堆内存的对象中，是对象的特有数据）；（静态方法只能访问静态变量，静态函数中没有this，main函数是静态的） 不考虑类：隐藏，不加的全局变量具有全局可见性，但是加了之后就只能在当前文件中使用；初始化为0；保持变量持久，生命周期和程序相同，函数中的静态变量始终存在且只进行一次初始化，但是退出函数后就不能使用了 考虑类： 成员变量：只与类关联，不于对象关联，只有一份拷贝；先于对象存在，必须在类外初始化，初始化可以不加static关键字；可以被非static成员函数访问 成员函数：没有this指针；只能访问静态成员；不能被声明为const、虚函数、vol...</div></div></div></a><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_3/" title="C++数据结构(三)：面向对象三大特性"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">C++数据结构(三)：面向对象三大特性</div></div><div class="info-2"><div class="info-item-1">C++数据结构（三）：面向对象三大特性一、继承1、类之间的关系包含关系：成员属性 使用关系：成员函数，友元函数，传递参数 is-A：继承关系，具有传递性 2、概念一个类继承了上一个类的属性和和方法，新的类包含上一个类的属性和方法，被称为子类或派生类，上一个类被称为父类或基类 3、访问控制private、public、protected 4、兼容性关系向上转型：派生类可以赋值给基类指针或引用，当使用基类指针或引用时，调用函数是基类的函数（静态绑定），虚函数则是派生类的函数（动态绑定） （1）静态类型、动态类型、静态绑定、动态绑定静态类型：对象在声明时采用的类型，在编译时已经确定 动态类型：指针或引用目前所指对象的类型，在运行期决定 静态绑定：绑定的是静态类型，所对应的函数或属性依赖与对象的静态类型，发生在编译期 动态绑定：动态类型，运行期（性能损失，但是多态性） 非虚函数一般是静态绑定，虚函数一般是动态绑定 引用可以使用动态绑定（虚函数） 5、继承方式实现继承：派生类继承基类的实现，可以直接使用基类的功能 接口继承：只继承基类的接口（纯虚函数&#x3D;0），必须实现基类接口 可视...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_1/" title="C++数据结构(一)：与其他编程语言对比"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-09</div><div class="info-item-2">C++数据结构(一)：与其他编程语言对比</div></div><div class="info-2"><div class="info-item-1">C++数据结构(一)：与其他编程语言的对比一、C++语言特性C++是一种强类型语言，支持泛型编程，兼具高性能和面向对象特性。 二、C++与C语言的区别1、编程范式 C语言：面向过程编程  **C++**：面向对象编程，支持类、继承、多态等特性    2、类型安全类型安全即内存安全，确保程序不会访问未授权的内存区域。  C语言：局部上下文类型安全；存在不安全操作如printf、malloc（返回void*） **C++**：更强的类型安全；new（返回固定类型）、dynamic_cast、模板等特性  ① new&#x2F;delete 与 malloc&#x2F;free 的区别12345678// C++方式int* ptr = new int(42);delete ptr;// C方式int* ptr = (int*)malloc(sizeof(int));*ptr = 42;free(ptr);  区别：  new/delete是运算符，malloc/free是函数 new自动计算大小，malloc需要手动计算 new会调用构造函数，delete会调用析构函数  3、str...</div></div></div></a><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_3/" title="C++数据结构(三)：面向对象三大特性"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-09</div><div class="info-item-2">C++数据结构(三)：面向对象三大特性</div></div><div class="info-2"><div class="info-item-1">C++数据结构（三）：面向对象三大特性一、继承1、类之间的关系包含关系：成员属性 使用关系：成员函数，友元函数，传递参数 is-A：继承关系，具有传递性 2、概念一个类继承了上一个类的属性和和方法，新的类包含上一个类的属性和方法，被称为子类或派生类，上一个类被称为父类或基类 3、访问控制private、public、protected 4、兼容性关系向上转型：派生类可以赋值给基类指针或引用，当使用基类指针或引用时，调用函数是基类的函数（静态绑定），虚函数则是派生类的函数（动态绑定） （1）静态类型、动态类型、静态绑定、动态绑定静态类型：对象在声明时采用的类型，在编译时已经确定 动态类型：指针或引用目前所指对象的类型，在运行期决定 静态绑定：绑定的是静态类型，所对应的函数或属性依赖与对象的静态类型，发生在编译期 动态绑定：动态类型，运行期（性能损失，但是多态性） 非虚函数一般是静态绑定，虚函数一般是动态绑定 引用可以使用动态绑定（虚函数） 5、继承方式实现继承：派生类继承基类的实现，可以直接使用基类的功能 接口继承：只继承基类的接口（纯虚函数&#x3D;0），必须实现基类接口 可视...</div></div></div></a><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_2/" title="C++数据结构(二)：C++11"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-09</div><div class="info-item-2">C++数据结构(二)：C++11</div></div><div class="info-2"><div class="info-item-1">C++数据结构（二）：C++11C++11C++11是里程碑式更新，现代C++起点 1、nullptr代替了NULLNULL来自C语言，一般由宏定义实现，而nullptr是C++11的新增关键字 NULL被定义位整数0，nullptr可以明确区分整型和指针类型，并且可以根据环境自动转换成相应的指针类型，但不会被转换为任何整型，使用不会造成参数传递错误 2、引入了auto和decltype实现了类型推导（1）autoauto让编译器根据初值进行类型推演，获取变量类型，所以auto修饰的变量必须拥有初值 基于范围的for循环 （2）decltype（表达式）选择并返回操作数的类型，编译器只分析表达式的类型，并不实际计算表达式的值，可先不赋值 （3）decltpye（auto）可以用来声明变量以及指示函数返回类型，在使用时会用“&#x3D;”后的表达式代替auto，再根据decltype确定类型 3、类和结构体中的初始化列表4、lambda表达式（匿名函数）编写内嵌的匿名函数（没有函数名），可以用来替换独立函数或函数对象。 每当定义一个lambda函数，编译器会自动生成一个闭包类型的对...</div></div></div></a><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_6/" title="C++数据结构(六)：变量类型"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-09</div><div class="info-item-2">C++数据结构(六)：变量类型</div></div><div class="info-2"><div class="info-item-1">C++数据结构（六）：变量类型一、分类1（一）结构体1、对齐问题第一个成员的地址和结构体地址相同，按照size最大的成员进行对齐，可以使用alignof&#x2F;əˈlaɪn&#x2F;算出对齐方式，可以使用alignas指定对齐方式（若小于自然对齐的最小单位，则失效，指定对齐单位为1则失效，使用#pragma pack（push,1)&#x2F;ˈpræɡmə pæk pʊʃ wʌn&#x2F;） 按照声明的顺序进行内存分配；每个变量相对于起始位置的偏移量必须是该变量类型大小的整数倍，不是整数倍空出内存，直到是整数倍为止；整个结构体的大小必须是结构体中size最大的成员的整数倍 #pragma pack（push,1)：偏移量是n和当前变量大小中较小值的整数倍；整体大小是n和最大变量中较小值的整数倍；n必须为1，2，4，8……其他值就按照默认分配 2、和class的区别struct默认成员共有，也默认共有继承 3、和C中struct的区别C中struct是自定义数据类型，没有权限设置，只能封装不能隐藏，没有成员函数，需要typedef才能不使用struct定义对象；C++中是...</div></div></div></a><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_8/" title="C++数据结构(八)：设计模式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-09</div><div class="info-item-2">C++数据结构(八)：设计模式</div></div><div class="info-2"><div class="info-item-1">C++数据结构（八）：设计模式设计模式是解决软件设计问题的经典解决方案。它们是在多年实践中总结出来的最佳实践，可以帮助开发者编写可维护、可扩展和可重用的代码。常见的设计模式分为三大类： 一、创建型模式（CreatI&#x2F;Onal Patterns）（一）单例模式（Singleton）确保一个类只有一个实例，并提供全局访问点。 将构造函数私有，删除拷贝构造和赋值，静态成员函数创建对象（静态实例指针&#x2F;对象（全局唯一实例存储）+静态获取方法（提供全局访问点）），确保线程安全（懒汉式或者饿汉式） 1、懒汉式是指在第一次调用时才创建实例。使用双重检查锁定（互斥锁：竞态条件（多线程同时调用可能重复创建实例，确保原子操作）） C++11 保证了局部静态变量的初始化是线程安全的（明确规定局部静态变量的初始化在多线程环境下只会执行一次，由编译器插入底层同步机制（类似隐式锁）），因此可以利用这一特性实现简单的线程安全单例模式。 123456789static Singleton* getInstance() &#123;//C++11之前    if (!instance) &#12...</div></div></div></a><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_7/" title="C++数据结构(七)：STL"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-09</div><div class="info-item-2">C++数据结构(七)：STL</div></div><div class="info-2"><div class="info-item-1">C++数据结构（七）：STL一、C++中标准库是什么（一）标准函数库独立的通用的，不属于任何类的函数，继承自C语言，过程式，不设计面向对象 如输入输出、数学函数、字符串处理、内存关联、时间和日期、随机数 (二）标准模板库STL基于模板的，有高可用性和可扩展性 容器（序列、关联、无序关联、容器适配器）；迭代器；算法；函数对象（仿函数）；适配器（容器适配器、函数适配器）；采用面向对象；组件通过迭代器解耦，使得算法可以独立于容器使用 二、STL（一）什么是STL算法、容器（序列式容器、关联式容器、适配器）、迭代器 容器线程不安全，需要mutex（C++标准库提供的互斥锁，用于保护共享资源，防止多线程并发访问导致数据竞争） （二）迭代器1、迭代器如何实现与容器相关联的指针，提供遍历容器所有元素的借接口 2、++it和it++前者返回一个引用（没有临时对象），后者返回一个对象（会产生临时对象） 整数的后置++也需要临时对象存储，返回旧副本值 通常不是原子的，需多步骤完成 （三）容器1、顺序容器vector和deque和list和slist （1）vector和数组类似，分配一块连续内存空间...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/my_tech_blog.github.io/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/my_tech_blog.github.io/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">JT</div><div class="author-info-description">专注于技术分享和学习</div><div class="site-data"><a href="/my_tech_blog.github.io/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/my_tech_blog.github.io/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/my_tech_blog.github.io/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E4%BB%8E%E4%BB%A3%E7%A0%81%E5%88%B0%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">C++数据结构（四）：从代码到程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81C-%E4%BB%8E%E4%BB%A3%E7%A0%81%E5%88%B0%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E7%BB%8F%E5%8E%86%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text">一、C++从代码到可执行程序经历了什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E9%A2%84%E5%A4%84%E7%90%86-%E9%A2%84%E7%BC%96%E8%AF%91"><span class="toc-number">1.1.1.</span> <span class="toc-text">1、预处理&#x2F;预编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E7%BC%96%E8%AF%91"><span class="toc-number">1.1.2.</span> <span class="toc-text">2、编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B1%87%E7%BC%96"><span class="toc-number">1.1.3.</span> <span class="toc-text">3、汇编</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8F%AF%E9%87%8D%E5%AE%9A%E4%BD%8D%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.3.0.0.1.</span> <span class="toc-text">可重定位目标文件</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E9%93%BE%E6%8E%A5"><span class="toc-number">1.1.4.</span> <span class="toc-text">4、链接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5%EF%BC%88-a-lib%EF%BC%89"><span class="toc-number">1.1.4.1.</span> <span class="toc-text">（1）静态链接（.a&#x2F;.lib）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%EF%BC%88-so-dll%EF%BC%89"><span class="toc-number">1.1.4.2.</span> <span class="toc-text">（2）动态链接（.so&#x2F;.dll）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.1.5.</span> <span class="toc-text">5、程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.5.1.</span> <span class="toc-text">（1）可执行目标文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%85%B1%E4%BA%AB%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6%EF%BC%88%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93-so%E3%80%81-dll%EF%BC%89"><span class="toc-number">1.1.5.2.</span> <span class="toc-text">（2）共享目标文件（动态链接库.so、.dll）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E8%BF%90%E8%A1%8C"><span class="toc-number">1.1.6.</span> <span class="toc-text">6、运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.7.</span> <span class="toc-text">7、问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%B0%86%E5%AD%97%E7%AC%A6%E4%B8%B2%E2%80%9Chello-world%E2%80%9D%E4%BB%8E%E5%BC%80%E5%A7%8B%E5%88%B0%E6%89%93%E5%8D%B0%E5%88%B0%E5%B1%8F%E5%B9%95%E7%9A%84%E5%85%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.7.1.</span> <span class="toc-text">（1）将字符串“hello world”从开始到打印到屏幕的全过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%BB%80%E4%B9%88%E5%9C%A8%E7%BC%96%E8%AF%91%E6%97%B6%E5%BE%97%E5%88%B0%EF%BC%8C%E4%BB%80%E4%B9%88%E5%9C%A8%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BE%97%E5%88%B0"><span class="toc-number">1.1.7.2.</span> <span class="toc-text">（2）什么在编译时得到，什么在运行时得到</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81main"><span class="toc-number">1.2.</span> <span class="toc-text">二、main</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%93%8D%E4%BD%9C%E5%9C%A8main%E5%87%BD%E6%95%B0%E4%B9%8B%E5%89%8D%E3%80%81%E4%B9%8B%E5%90%8E%E8%BF%9B%E8%A1%8C"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、什么操作在main函数之前、之后进行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%89%8D"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">（1）前</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%90%8E"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">（2）后</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">（3）问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A0%E5%9C%A8main%E5%87%BD%E6%95%B0%E4%B8%AD%E5%AE%9A%E4%B9%89static%E5%8F%98%E9%87%8F%EF%BC%8C%E6%98%AF%E5%85%88%E8%BF%90%E8%A1%8Cmain%E5%87%BD%E6%95%B0%E8%BF%98%E6%98%AF%E5%85%88%E5%88%9D%E5%A7%8B%E5%8C%96static%E5%8F%98%E9%87%8F"><span class="toc-number">1.2.1.3.1.</span> <span class="toc-text">①在main函数中定义static变量，是先运行main函数还是先初始化static变量</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E7%A8%8B%E5%BA%8F%E5%9C%A8%E6%89%A7%E8%A1%8Cint-main-int-argc-char-argv-%E6%97%B6%E7%9A%84%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、程序在执行int main(int argc,char*argv[])时的内存结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81main%E5%87%BD%E6%95%B0%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">1.2.3.</span> <span class="toc-text">3、main函数的返回值</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E9%9D%9Emain%E5%87%BD%E6%95%B0%E5%B0%86%E4%B8%B4%E6%97%B6%E5%8F%98%E9%87%8F%E4%BD%9C%E4%B8%BA%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">（1）非main函数将临时变量作为返回值</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8E%8B%E6%A0%88"><span class="toc-number">1.3.</span> <span class="toc-text">三、压栈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81C-%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84%E5%8E%8B%E6%A0%88%E8%BF%87%E7%A8%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">1、C++函数调用的压栈过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%A0%B9%E6%8D%AE%E7%A8%8B%E5%BA%8Fmain%E8%B0%83%E7%94%A8fun%E8%BF%90%E8%A1%8Cprint-f-f"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">（1）根据程序main调用fun运行print(f(),f())</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E6%96%87%E5%AD%97%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">（2）文字描述</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%86%85%E5%AD%98"><span class="toc-number">1.4.</span> <span class="toc-text">四、内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.4.1.</span> <span class="toc-text">1、内存分区&#x2F;内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%A0%88%E5%92%8C%E5%A0%86%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">（1）栈和堆的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A0%E5%93%AA%E4%B8%AA%E5%BF%AB%E4%B8%80%E7%82%B9"><span class="toc-number">1.4.1.1.1.</span> <span class="toc-text">①哪个快一点</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A1%E5%93%AA%E4%B8%AA%E5%BB%BA%E7%AB%8B%E5%AF%B9%E8%B1%A1%E6%9B%B4%E5%BF%AB"><span class="toc-number">1.4.1.1.2.</span> <span class="toc-text">②哪个建立对象更快</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E7%B1%BB%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4"><span class="toc-number">1.4.2.</span> <span class="toc-text">2、类的对象存储空间</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E7%A9%BA%E7%B1%BB"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">（1）空类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%86%85%E5%AD%98%E6%B1%A0"><span class="toc-number">1.4.3.</span> <span class="toc-text">3、内存池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E5%8A%A8%E6%80%81%E5%86%85%E5%AD%98%E7%94%B3%E8%AF%B7%EF%BC%88malloc-calloc-new%EF%BC%89"><span class="toc-number">1.4.4.</span> <span class="toc-text">4、动态内存申请（malloc, calloc, new）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%88%86%E9%85%8D%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E5%92%8C%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="toc-number">1.4.4.1.</span> <span class="toc-text">（1）分配虚拟内存空间和物理内存空间</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A0malloc"><span class="toc-number">1.4.4.1.1.</span> <span class="toc-text">①malloc</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A1new"><span class="toc-number">1.4.4.1.2.</span> <span class="toc-text">②new</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A2calloc"><span class="toc-number">1.4.4.1.3.</span> <span class="toc-text">③calloc</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A3realloc"><span class="toc-number">1.4.4.1.4.</span> <span class="toc-text">④realloc</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89malloc-free%E5%92%8Cnew-delete%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.4.4.2.</span> <span class="toc-text">（2）malloc&#x2F;free和new&#x2F;delete的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89new%E3%80%81delete%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="toc-number">1.4.4.3.</span> <span class="toc-text">（3）new、delete是如何实现的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89new-delete"><span class="toc-number">1.4.4.4.</span> <span class="toc-text">（4）为什么要有new&#x2F;delete</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%885%EF%BC%89%E8%A2%ABfree%E6%8E%89%E7%9A%84%E7%A9%BA%E9%97%B4%E6%98%AF%E7%9B%B4%E6%8E%A5%E8%BF%94%E8%BF%98%E7%BB%99%E5%86%85%E5%AD%98%E5%90%97"><span class="toc-number">1.4.4.5.</span> <span class="toc-text">（5）被free掉的空间是直接返还给内存吗</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%886%EF%BC%89C-%E4%B8%AD%E6%9C%89%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F%E7%9A%84new"><span class="toc-number">1.4.4.6.</span> <span class="toc-text">（6）C++中有几种方式的new</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A0explain"><span class="toc-number">1.4.4.6.1.</span> <span class="toc-text">①explain</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A1nothrow"><span class="toc-number">1.4.4.6.2.</span> <span class="toc-text">②nothrow</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A2placement"><span class="toc-number">1.4.4.6.3.</span> <span class="toc-text">③placement</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%887%EF%BC%89delete-p%E3%80%81delete-p%E3%80%81allocator%E9%83%BD%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8"><span class="toc-number">1.4.4.7.</span> <span class="toc-text">（7）delete p、delete[]p、allocator都有什么作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%888%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%EF%BC%8C%E5%A6%82%E4%BD%95%E6%A3%80%E6%B5%8B%E4%B8%8E%E9%81%BF%E5%85%8D"><span class="toc-number">1.4.4.8.</span> <span class="toc-text">（8）什么是内存泄露，如何检测与避免</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A0%E9%81%BF%E5%85%8D"><span class="toc-number">1.4.4.8.1.</span> <span class="toc-text">①避免</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A1%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7"><span class="toc-number">1.4.4.8.2.</span> <span class="toc-text">②检测工具</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%889%EF%BC%89%E7%B1%BB%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%AA%E8%83%BD%E9%9D%99%E6%80%81%E5%88%86%E9%85%8D%E6%88%96%E5%8A%A8%E6%80%81%E5%88%86%E9%85%8D"><span class="toc-number">1.4.4.9.</span> <span class="toc-text">（9）类如何实现只能静态分配或动态分配</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A0%E9%9D%99%E6%80%81"><span class="toc-number">1.4.4.9.1.</span> <span class="toc-text">①静态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A1%E5%8A%A8%E6%80%81"><span class="toc-number">1.4.4.9.2.</span> <span class="toc-text">②动态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%91%A2%E5%BB%BA%E7%AB%8B%E7%B1%BB%E7%9A%84%E5%AF%B9%E8%B1%A1%E6%9C%89%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">1.4.4.9.3.</span> <span class="toc-text">③建立类的对象有两种方式</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/my_tech_blog.github.io/2025/11/10/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F_1/" title="无标题">无标题</a><time datetime="2025-11-10T02:18:30.298Z" title="发表于 2025-11-10 10:18:30">2025-11-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/my_tech_blog.github.io/2025/11/10/Redis_1/" title="无标题">无标题</a><time datetime="2025-11-10T02:18:15.191Z" title="发表于 2025-11-10 10:18:15">2025-11-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/my_tech_blog.github.io/2025/11/10/%E6%95%B0%E6%8D%AE%E5%BA%93_1/" title="无标题">无标题</a><time datetime="2025-11-10T02:17:51.629Z" title="发表于 2025-11-10 10:17:51">2025-11-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_1/" title="计算机网络体系结构详解：OSI七层模型">计算机网络体系结构详解：OSI七层模型</a><time datetime="2025-11-08T16:01:01.000Z" title="发表于 2025-11-09 00:01:01">2025-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/my_tech_blog.github.io/2025/11/09/C++%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_8/" title="C++数据结构(八)：设计模式">C++数据结构(八)：设计模式</a><time datetime="2025-11-08T16:00:08.000Z" title="发表于 2025-11-09 00:00:08">2025-11-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By JT</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/my_tech_blog.github.io/js/utils.js?v=5.5.2"></script><script src="/my_tech_blog.github.io/js/main.js?v=5.5.2"></script><div class="js-pjax"></div><script async data-pjax src="/my_tech_blog.github.io/"></script></div></body></html>
