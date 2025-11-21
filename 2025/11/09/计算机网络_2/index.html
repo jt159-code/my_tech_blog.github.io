@@ -1,0 +1,411 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>计算机网络（二）：TCP/IP五层模型 | 技术博客</title><meta name="author" content="JT"><meta name="copyright" content="JT"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="计算机网络（二）：TCP&#x2F;IP五层模型 进行不同设备之间的网络通信，而设备是多样的，为了兼容设备多样性，协商一套通用的网络协议     一、应用层——第五层专注于为用户提供服务，用户直接接触 工作在操作系统的用户态，以下都工作在内核态 消息或报文 HTTP、HTTPS、Telnet（远程登录服务的标准协议，23）、FTP（文件传输协议，数据端口是20、控制端口是21）、TFTP（简单文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络（二）：TCP&#x2F;IP五层模型">
+<meta property="og:url" content="https://jt159-code.github.io/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_2/index.html">
+<meta property="og:site_name" content="技术博客">
+<meta property="og:description" content="计算机网络（二）：TCP&#x2F;IP五层模型 进行不同设备之间的网络通信，而设备是多样的，为了兼容设备多样性，协商一套通用的网络协议     一、应用层——第五层专注于为用户提供服务，用户直接接触 工作在操作系统的用户态，以下都工作在内核态 消息或报文 HTTP、HTTPS、Telnet（远程登录服务的标准协议，23）、FTP（文件传输协议，数据端口是20、控制端口是21）、TFTP（简单文件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jt159-code.github.io/my_tech_blog.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-11-08T16:01:02.000Z">
+<meta property="article:modified_time" content="2025-11-18T02:29:46.827Z">
+<meta property="article:author" content="JT">
+<meta property="article:tag" content="网络协议">
+<meta property="article:tag" content="网络体系结构">
+<meta property="article:tag" content="TCP&#x2F;IP模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jt159-code.github.io/my_tech_blog.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "计算机网络（二）：TCP/IP五层模型",
+  "url": "https://jt159-code.github.io/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_2/",
+  "image": "https://jt159-code.github.io/my_tech_blog.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-11-08T16:01:02.000Z",
+  "dateModified": "2025-11-18T02:29:46.827Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "JT",
+      "url": "https://jt159-code.github.io/my_tech_blog.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/my_tech_blog.github.io/img/favicon.png"><link rel="canonical" href="https://jt159-code.github.io/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/my_tech_blog.github.io/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/my_tech_blog.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '计算机网络（二）：TCP/IP五层模型',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style>
+  /* 全局字体大小调整 */
+  body {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  
+  /* 文章内容字体调整 */
+  .article-content {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  
+  /* 标题字体大小调整 */
+  h1 {
+    font-size: 2.2em;
+  }
+  h2 {
+    font-size: 1.8em;
+  }
+  h3 {
+    font-size: 1.5em;
+  }
+  h4 {
+    font-size: 1.3em;
+  }
+  h5 {
+    font-size: 1.1em;
+  }
+  h6 {
+    font-size: 1em;
+  }
+  
+  /* 代码块样式 - 去除高亮，使用简单样式 */
+  pre, code {
+    background: #f8f9fa !important;
+    color: #333 !important;
+    border: 1px solid #e9ecef !important;
+    font-size: 15px !important;
+  }
+  
+  /* 侧边栏目录样式调整 */
+  #aside-content .toc-content {
+    font-size: 14px;
+  }
+  #aside-content .toc-content .toc-item {
+    margin: 4px 0;
+  }
+</style>
+<meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/my_tech_blog.github.io/./img/bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/my_tech_blog.github.io/"><span class="site-name">技术博客</span></a><a class="nav-page-title" href="/my_tech_blog.github.io/"><span class="site-name">计算机网络（二）：TCP/IP五层模型</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">计算机网络（二）：TCP/IP五层模型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-08T16:01:02.000Z" title="发表于 2025-11-09 00:01:02">2025-11-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-18T02:29:46.827Z" title="更新于 2025-11-18 10:29:46">2025-11-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/my_tech_blog.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="计算机网络（二）：TCP-IP五层模型"><a href="#计算机网络（二）：TCP-IP五层模型" class="headerlink" title="计算机网络（二）：TCP&#x2F;IP五层模型"></a>计算机网络（二）：TCP&#x2F;IP五层模型</h1><p><img src="C:\Users\dell\AppData\Roaming\Typora\typora-user-images\1762997968991.png" alt="1762997968991"></p>
+<p>进行不同设备之间的网络通信，而设备是多样的，为了兼容设备多样性，协商一套通用的网络协议</p>
+<img src="C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20250428150312205.png" alt="image-20250428150312205" style="zoom: 67%;" />
+
+<img src="C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20250428152230857.png" alt="image-20250428152230857" style="zoom: 50%;" />
+
+<h2 id="一、应用层——第五层"><a href="#一、应用层——第五层" class="headerlink" title="一、应用层——第五层"></a>一、应用层——第五层</h2><p>专注于为用户提供服务，用户直接接触</p>
+<p>工作在操作系统的用户态，以下都工作在内核态</p>
+<p>消息或报文</p>
+<p>HTTP、HTTPS、Telnet（远程登录服务的标准协议，23）、FTP（文件传输协议，数据端口是20、控制端口是21）、TFTP（简单文件传输协议，69）、SMTP（简单邮件传输协议，发送25）、POP（邮局协议，接收110）、DNS、DHCP</p>
+<p>WebSocket 是一种基于 TCP 的全双工通信协议（HTTP长连接虽然复用TCP传输多个HTTP请求，但是还是“请求-响应模式”）</p>
+<h3 id="（一）基础协议"><a href="#（一）基础协议" class="headerlink" title="（一）基础协议"></a>（一）基础协议</h3><h4 id="1、DHCP动态主机配置协议"><a href="#1、DHCP动态主机配置协议" class="headerlink" title="1、DHCP动态主机配置协议"></a>1、DHCP动态主机配置协议</h4><p>通过DHCP获得IP地址，DHCP客户端监听68端口，DHCP服务端监听67端口</p>
+<p>客户端发出DHCP发现报文，使用UDP广播：源IP0.0.0.0，目标255.255.255.255</p>
+<p>DHCP服务器用DHCP提供报文，广播或单播</p>
+<p>客户端选择服务器，向其发送DHCP请求报文：UDP广播（通知其他服务器、防止IP冲突）</p>
+<p>服务端用DHCP ACK报文响应，广播或单播</p>
+<h5 id="（1）不在同一个链路"><a href="#（1）不在同一个链路" class="headerlink" title="（1）不在同一个链路"></a>（1）不在同一个链路</h5><p>DHCP中继代理服务器</p>
+<h4 id="2、MQTT协议"><a href="#2、MQTT协议" class="headerlink" title="2、MQTT协议"></a>2、MQTT协议</h4><p>消息队列遥测传输协议，应用层协议，工作在TCP&#x2F;IP协议栈上</p>
+<p>轻量级发布&#x2F;订阅模式消息协议（HTTP：请求&#x2F;响应模型），专门为低带宽、高延迟或不稳定网络设计</p>
+<h5 id="（1）安全保证"><a href="#（1）安全保证" class="headerlink" title="（1）安全保证"></a>（1）安全保证</h5><p>强制使用TLS&#x2F;SSL加密传输（TLS证书验证：设备级身份，防御中间人攻击）：8883端口，建立TLS握手，加密所有MQTT报文</p>
+<p>客户端证书认证（设备合法性）</p>
+<p>对用户使用用户名&#x2F;密码认证（业务级权限，防止凭证泄露）</p>
+<p><img src="C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20250423115650378.png" alt="image-20250423115650378" style="zoom: 50%;" /><img src="C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20250423120115661.png" alt="image-20250423120115661" style="zoom:50%;" /></p>
+<h5 id="（2）与HTTP对比"><a href="#（2）与HTTP对比" class="headerlink" title="（2）与HTTP对比"></a>（2）与HTTP对比</h5><h6 id="①核心职能对比"><a href="#①核心职能对比" class="headerlink" title="①核心职能对比"></a>①核心职能对比</h6><p>MQTT：设备间消息路由；低消耗通信；实时数据分发；离线消息处理</p>
+<p>HTTP：资源传输；状态操作；超媒体交互；缓存控制</p>
+<h6 id="②技术特性对比"><a href="#②技术特性对比" class="headerlink" title="②技术特性对比"></a>②技术特性对比</h6><p>报文：二进制，纯文本</p>
+<p>连接管理：长连接，短连接；有心跳机制，无心跳机制；无状态，但是访问点维护状态&#x2F;无状态（需要Cookie）</p>
+<h6 id="③性能对比"><a href="#③性能对比" class="headerlink" title="③性能对比"></a>③性能对比</h6><p>延迟：实时，轮训</p>
+<p>吞吐量：大（二进制、长连接、服务器可主动推送），小</p>
+<img src="C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20250423114850486.png" alt="image-20250423114850486" style="zoom:67%;" />
+
+<h5 id="（3）应用"><a href="#（3）应用" class="headerlink" title="（3）应用"></a>（3）应用</h5><p>物联网设备通信</p>
+<p>移动推送通知</p>
+<p>车联网系统</p>
+<p>工业4.0（设备监控）</p>
+<h3 id="（二）扩展协议"><a href="#（二）扩展协议" class="headerlink" title="（二）扩展协议"></a>（二）扩展协议</h3><p>扩展协议：WebSocket(全双工通信)、gRPC(基于HTTP&#x2F;2的RPC)</p>
+<h4 id="1、WebSocket"><a href="#1、WebSocket" class="headerlink" title="1、WebSocket"></a>1、WebSocket</h4><p>全双工，基于TCP，帧</p>
+<p>数据头（防止纯裸TCP粘包）+data</p>
+<p>opcode字段：什么类型的数据帧</p>
+<p>payload（是否大于125，继续读payload）：数据长度</p>
+<p>payload data：数据</p>
+<h5 id="（1）和HTTP区别"><a href="#（1）和HTTP区别" class="headerlink" title="（1）和HTTP区别"></a>（1）和HTTP区别</h5><p>HTTP半双工，WebSocket全双工</p>
+<p>HTTP用于图文网页，WebSocket用于网页游戏（经历了TCP三次握手后，利用HTTP协议升级为WebSocket协议，HTTP请求会带上特殊header头：升级协议、想升级为的协议、随机生成的base64码（经过公开算法转换为字符串），频繁交互）</p>
+<h5 id="（2）用户不操作，HTTP网页如何收到服务端消息"><a href="#（2）用户不操作，HTTP网页如何收到服务端消息" class="headerlink" title="（2）用户不操作，HTTP网页如何收到服务端消息"></a>（2）用户不操作，HTTP网页如何收到服务端消息</h5><p>HTTP不断轮训（伪服务器推）</p>
+<p>长轮训：延迟超时时间（服务器推送）</p>
+<h4 id="2、RPC技术"><a href="#2、RPC技术" class="headerlink" title="2、RPC技术"></a>2、RPC技术</h4><p>远程过程调用，允许调用另一地址空间（通常是远程机器）的过程或函数，想调用本地方法一样。</p>
+<p>本身不是一种具体的协议，而是一种调用方式（它的具体实现方式才是协议：gRPC、Thrift），大部分RPC协议底层是TCP，但是也可以改为UDP、HTTP</p>
+<h5 id="（1）用途"><a href="#（1）用途" class="headerlink" title="（1）用途"></a>（1）用途</h5><p>分布式系统通信；微服务架构中服务调用；跨语言、跨平台的服务集成</p>
+<h5 id="（2）与HTTP区别"><a href="#（2）与HTTP区别" class="headerlink" title="（2）与HTTP区别"></a>（2）与HTTP区别</h5><p>协议层级：HTTP是应用层，RPC是协议（定义了远程调用的标准交互模式）与框架（提供实现该协议的具体工具库）的双重身份（协议是框架的基础规范，框架扩展协议能力）</p>
+<p>服务发现（找到对应服务器的IP端口）：HTTP使用DNS七解析IP地址，默认80端口；RPC一般有专门的中间件（也可以使用DNS）</p>
+<p>底层连接形式：TCP长连接，但是还会建立连接池，多条连接可以复用，可以提升网络请求性能，许多变成语言的网络库会给HTTP加连接池（如Go）</p>
+<p>性能：RPC通常性能更高（与HTTP1.1比较），（二进制协议），HTTP传输内容以文本为主（头和体：Json序列化），PRC使用Protobuf</p>
+<p>目的：跨网络调用本地方法；资源传输与操作</p>
+<p>使用场景：HTTP适合对外API，RPC适合内部服务调用</p>
+<p>服务治理：RPC框架通常内置服务发现、负载均衡等</p>
+<p>先有的RPC，再有的HTTP，RPC可以支持C&#x2F;S架构，但是Browser不仅需要和自家公司服务器访问，也要访问别的公司家的服务器，为了适应browser&#x2F;S，出现HTTP</p>
+<h5 id="（3）gRPC"><a href="#（3）gRPC" class="headerlink" title="（3）gRPC"></a>（3）gRPC</h5><p>全双工，基于HTTP&#x2F;2</p>
+<h2 id="二、传输层——第四层"><a href="#二、传输层——第四层" class="headerlink" title="二、传输层——第四层"></a>二、传输层——第四层</h2><p>为应用层提供网络服务，简单、高效、专注</p>
+<p>TCP、UDP；段</p>
+<p>传输时数据包分块：当传输层数据包大小超过MSS（TCP最大报文段长度），在TCP协议中，将分块称为TCP报文段</p>
+<p>接收时：负责把数据包传给应用，使用端口区分应用</p>
+<h3 id="（一）UDP（用户数据报协议）"><a href="#（一）UDP（用户数据报协议）" class="headerlink" title="（一）UDP（用户数据报协议）"></a>（一）UDP（用户数据报协议）</h3><p>无连接，尽最大努力的数据传输服务（不保证数据传输的可靠性），面向报文（每个UDP报文就是一个用户消息的边界）</p>
+<h4 id="1、和TCP的区别"><a href="#1、和TCP的区别" class="headerlink" title="1、和TCP的区别"></a>1、和TCP的区别</h4><p>UDP：面向报文的（TCP面向字节流），不合并、拆分，只加入首部，需要应用层控制报文大小；UDP首部只有8个字节（源端口+目的端口+包长度+校验和；TCP20）；没有拥塞控制；没有流量控制；不可靠信道；支持一和多对（TCP只能点到点）</p>
+<p>连接</p>
+<p>服务对象</p>
+<p>可靠性</p>
+<p>拥塞控制、流量控制</p>
+<p>首部开销</p>
+<p>传输方式</p>
+<p>分片</p>
+<h4 id="2、UDP对应的应用层协议"><a href="#2、UDP对应的应用层协议" class="headerlink" title="2、UDP对应的应用层协议"></a>2、UDP对应的应用层协议</h4><p>DNS、SNMP（简单网络管理协议161）、TFTP</p>
+<h4 id="3、在进行UDP编程，一次发送多少字节好"><a href="#3、在进行UDP编程，一次发送多少字节好" class="headerlink" title="3、在进行UDP编程，一次发送多少字节好"></a>3、在进行UDP编程，一次发送多少字节好</h4><p>MTU（最大传输单元，网络层IP数据报长度，不包括链路层首尾18个字节）-8（UDP头部）-20（IP首部）</p>
+<p>网络上标准MTU&#x3D;576，所以控制在548以内比较好</p>
+<h4 id="4、如何优化UDP可靠性"><a href="#4、如何优化UDP可靠性" class="headerlink" title="4、如何优化UDP可靠性"></a>4、如何优化UDP可靠性</h4><p>序列号+确认应答（ACK）</p>
+<p>超时重传+滑动窗口</p>
+<p>校验</p>
+<p>现成方案：QUIC协议（Quick UDP Internet Connections&#x2F;kwɪk&#x2F; 快速UDP网络连接）</p>
+<h2 id="三、网络层——第三层"><a href="#三、网络层——第三层" class="headerlink" title="三、网络层——第三层"></a>三、网络层——第三层</h2><p>实际传输功能，将数据从一个设备传输到另一个设备，需要有区分设备的编号。将传输层的报文作为数据部分，再加上IP包头组成IP报文，如果IP包围大小超过MTU（最大传输单元，以太网中一般为1500），就会再次进行分片，得到IP报文</p>
+<p>NAT、ICMP、IGMP、IP协议：寻址、路由；路由器；包</p>
+<h3 id="（一）功能"><a href="#（一）功能" class="headerlink" title="（一）功能"></a>（一）功能</h3><h4 id="1、寻址"><a href="#1、寻址" class="headerlink" title="1、寻址"></a>1、寻址</h4><p>去往下一个目的地该朝哪个方向走，寻址先匹配到相同的网络号，才会去找对应的主机</p>
+<p>IP区分了设备，并将IP地址分成了两种意义：根据子网掩码（IP&#x2F;24，其中24就是简化的子网掩码，24个1：111111111111111111000000（255.255.255.0））计算出网络号（属于哪个子网）+主机号（标识同一子网的不同设备）</p>
+<p>网络号&#x3D;IP与子网掩码进行按位与</p>
+<p>主机号&#x3D;子网掩码取反后与IP进行按位与操作</p>
+<p>子网中最后一个是广播地址225</p>
+<h4 id="2、路由"><a href="#2、路由" class="headerlink" title="2、路由"></a>2、路由</h4><p>当到达一个网络节点，需要路由算法决定下一步走哪条路径</p>
+<h3 id="（二）协议"><a href="#（二）协议" class="headerlink" title="（二）协议"></a>（二）协议</h3><h4 id="1、NAT网络地址转换"><a href="#1、NAT网络地址转换" class="headerlink" title="1、NAT网络地址转换"></a>1、NAT网络地址转换</h4><p>将私有IP地址转换为公有IP地址，解决IPv4地址不足的问题</p>
+<p>NAPT（网络地址端口转换，通过IP+端口的唯一组合，实现多个内网设备共享一个公共IP）路由转换表在NAT路由器上生成</p>
+<h4 id="2、ICMP互联网控制报文协议"><a href="#2、ICMP互联网控制报文协议" class="headerlink" title="2、ICMP互联网控制报文协议"></a>2、ICMP互联网控制报文协议</h4><p>网络层协议，网络控制报文协议；传递网络信息，诊断网络故障</p>
+<h5 id="（1）报文分类"><a href="#（1）报文分类" class="headerlink" title="（1）报文分类"></a>（1）报文分类</h5><p>ICMP差错报告报文：终点不可达；参数问题；改变路由；时间超过</p>
+<p>ICMP询问报文：回送请求和回答；时间戳请求和回答：询问当前时间，返回一个32位时间戳</p>
+<h5 id="（2）Ping原理"><a href="#（2）Ping原理" class="headerlink" title="（2）Ping原理"></a>（2）Ping原理</h5><p>向对方发送一个ICMP回送请求报文，如果可以到达，对方返回一个回送回答报文</p>
+<h4 id="3、IGMP互联网组管理协议"><a href="#3、IGMP互联网组管理协议" class="headerlink" title="3、IGMP互联网组管理协议"></a>3、IGMP互联网组管理协议</h4><p>管理IP组播组成员，工作在主机（组播成员）和最后一跳路由之间</p>
+<h2 id="四、数据链路层（网络接口层）——第二层"><a href="#四、数据链路层（网络接口层）——第二层" class="headerlink" title="四、数据链路层（网络接口层）——第二层"></a>四、数据链路层（网络接口层）——第二层</h2><p>为网络层提供链路级别传输的服务，负责在以太网、WiFi这样的底层网络上发送原始数据包，工作在网卡这个层次，使用MAC地址来标识网络上的设备。生成了IP头部后，接下来交给网络接口层，在IP头部前加上MAC头部，并封装成数据帧发送到网络上</p>
+<p>APR协议、RARP、PPP；交换机；帧</p>
+<h6 id="以太网"><a href="#以太网" class="headerlink" title="以太网"></a>以太网</h6><p>在一种局域网内，将附近的设备连接起来，使它们之间可以通讯的技术。通讯需要MAC地址。</p>
+<h3 id="（一）协议"><a href="#（一）协议" class="headerlink" title="（一）协议"></a>（一）协议</h3><h4 id="1、RARP"><a href="#1、RARP" class="headerlink" title="1、RARP"></a>1、RARP</h4><p>数据链路层协议</p>
+<p>反向地址转换协议，与ARP工作方式相反；发出要解释的物理地址并返回七IP地址</p>
+<h5 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h5><p>网络上每台设备都有自己的硬件地址，是由设备厂商分配的MAC地址，主机从网卡上读取MAC地址，然后在网络上发送一个RARP请求的数据包，请求RARP服务器返回IP地址</p>
+<p>RARP服务器接收到RARP请求后，分配IP地址并返回应答</p>
+<p>客户端收到IP地址，利用IP地址进行通信</p>
+<h2 id="五、物理层——第一层"><a href="#五、物理层——第一层" class="headerlink" title="五、物理层——第一层"></a>五、物理层——第一层</h2><h2 id="六、为什么要把TCP-IP协议栈分成5层（或7层）"><a href="#六、为什么要把TCP-IP协议栈分成5层（或7层）" class="headerlink" title="六、为什么要把TCP&#x2F;IP协议栈分成5层（或7层）"></a>六、为什么要把TCP&#x2F;IP协议栈分成5层（或7层）</h2><p>根据阿帕网的设计经验，复杂的网络结构应该是分层的</p>
+<p>层之间是独立的</p>
+<p>灵活性好</p>
+<p>结构上可以分隔开</p>
+<p>便于实现和维护</p>
+<p>能促进标准化工作</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://jt159-code.github.io/my_tech_blog.github.io">JT</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jt159-code.github.io/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_2/">https://jt159-code.github.io/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://jt159-code.github.io/my_tech_blog.github.io" target="_blank">技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/my_tech_blog.github.io/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a><a class="post-meta__tags" href="/my_tech_blog.github.io/tags/%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">网络体系结构</a><a class="post-meta__tags" href="/my_tech_blog.github.io/tags/TCP-IP%E6%A8%A1%E5%9E%8B/">TCP/IP模型</a></div><div class="post-share"><div class="social-share" data-image="/my_tech_blog.github.io/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_3/" title="计算机网络（三）：传入URL到网页显示"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">计算机网络（三）：传入URL到网页显示</div></div><div class="info-2"><div class="info-item-1">计算机网络（三）：传入URL到网页显示  输入URL，解析URL-&gt;查看浏览器缓存没有-&gt;操作系统缓存没有-&gt;本机host文件没有-&gt;根据域名进行DNS域名解析-&gt;得到IP地址，进行TCP连接-&gt;TLS&#x2F;SSL连接（HTTPS）-&gt;向IP地址发送HTTP请求（生成HTTP报文并封装网络数据包：MAC头是通过ARP根据IP得到服务器MAC（同一局域网）&#x2F;默认网关MAC（不同网络））-&gt;数据传输（交换机、路由器：MAC地址会重写）-&gt;服务器处理请求-&gt;服务器响应，返回响应报文（HTTP头+html）-&gt;浏览器解析HTML-&gt;请求html中元素，返回-&gt;浏览器渲染-&gt;TCP断开（四次挥手）   通过DNS获取到IP后，可以把HTTP的传输工作交给操作系统的协议栈 协议栈上面的部分会向下面的部分委托工作，下面的部分收到委托的工作并执行 一、URL访问数据的协议:+&#x2F;&#x2F;服务器的名称（服务器域名）+数据源（文件）的路径名（&#x2F;是Web服务的根目录）（刻省略，会访...</div></div></div></a><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_1/" title="计算机网络（一）：OSI七层模型"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">计算机网络（一）：OSI七层模型</div></div><div class="info-2"><div class="info-item-1">计算机网络（一）：OSI七层模型一、OSI七层网络参考模型OSI（Open Systems Interconnection）参考模型是国际标准化组织提出的网络通信概念模型，将网络通信的工作分为7个层次。  （1）应用层（Application Layer） - 第7层作用：为应用程序提供网络服务接口，直接面向用户。（各种应用软件） 主要功能：  提供用户接口，支持各种网络服务 识别通信伙伴的身份和可用性 同步通信过程 错误恢复的约定  典型协议和服务：  HTTP&#x2F;HTTPS：网页浏览 FTP：文件传输 SMTP&#x2F;POP3&#x2F;IMAP：电子邮件 DNS：域名解析 SSH：安全远程登录  数据单位：报文（Message） （2）表示层（Presentation Layer） - 第6层作用：处理两个通信系统中交换信息的表示方式，确保不同系统能够理解彼此的数据。（用户信息的表示问题，数据格式标识；图像视频编解码，数据加密） 主要功能：  数据格式转换（编码、解码） 数据加密和解密 数据压缩和解压缩 字符集转换  实际应用：  JPEG、MPEG等多媒体格式...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_1/" title="计算机网络（一）：OSI七层模型"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-09</div><div class="info-item-2">计算机网络（一）：OSI七层模型</div></div><div class="info-2"><div class="info-item-1">计算机网络（一）：OSI七层模型一、OSI七层网络参考模型OSI（Open Systems Interconnection）参考模型是国际标准化组织提出的网络通信概念模型，将网络通信的工作分为7个层次。  （1）应用层（Application Layer） - 第7层作用：为应用程序提供网络服务接口，直接面向用户。（各种应用软件） 主要功能：  提供用户接口，支持各种网络服务 识别通信伙伴的身份和可用性 同步通信过程 错误恢复的约定  典型协议和服务：  HTTP&#x2F;HTTPS：网页浏览 FTP：文件传输 SMTP&#x2F;POP3&#x2F;IMAP：电子邮件 DNS：域名解析 SSH：安全远程登录  数据单位：报文（Message） （2）表示层（Presentation Layer） - 第6层作用：处理两个通信系统中交换信息的表示方式，确保不同系统能够理解彼此的数据。（用户信息的表示问题，数据格式标识；图像视频编解码，数据加密） 主要功能：  数据格式转换（编码、解码） 数据加密和解密 数据压缩和解压缩 字符集转换  实际应用：  JPEG、MPEG等多媒体格式...</div></div></div></a><a class="pagination-related" href="/my_tech_blog.github.io/2025/11/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C_3/" title="计算机网络（三）：传入URL到网页显示"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-09</div><div class="info-item-2">计算机网络（三）：传入URL到网页显示</div></div><div class="info-2"><div class="info-item-1">计算机网络（三）：传入URL到网页显示  输入URL，解析URL-&gt;查看浏览器缓存没有-&gt;操作系统缓存没有-&gt;本机host文件没有-&gt;根据域名进行DNS域名解析-&gt;得到IP地址，进行TCP连接-&gt;TLS&#x2F;SSL连接（HTTPS）-&gt;向IP地址发送HTTP请求（生成HTTP报文并封装网络数据包：MAC头是通过ARP根据IP得到服务器MAC（同一局域网）&#x2F;默认网关MAC（不同网络））-&gt;数据传输（交换机、路由器：MAC地址会重写）-&gt;服务器处理请求-&gt;服务器响应，返回响应报文（HTTP头+html）-&gt;浏览器解析HTML-&gt;请求html中元素，返回-&gt;浏览器渲染-&gt;TCP断开（四次挥手）   通过DNS获取到IP后，可以把HTTP的传输工作交给操作系统的协议栈 协议栈上面的部分会向下面的部分委托工作，下面的部分收到委托的工作并执行 一、URL访问数据的协议:+&#x2F;&#x2F;服务器的名称（服务器域名）+数据源（文件）的路径名（&#x2F;是Web服务的根目录）（刻省略，会访...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/my_tech_blog.github.io/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/my_tech_blog.github.io/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">JT</div><div class="author-info-description">专注于技术分享和学习</div><div class="site-data"><a href="/my_tech_blog.github.io/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/my_tech_blog.github.io/tags/"><div class="headline">标签</div><div class="length-num">41</div></a><a href="/my_tech_blog.github.io/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9ATCP-IP%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">计算机网络（二）：TCP&#x2F;IP五层模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%BA%94%E7%94%A8%E5%B1%82%E2%80%94%E2%80%94%E7%AC%AC%E4%BA%94%E5%B1%82"><span class="toc-number">1.1.</span> <span class="toc-text">一、应用层——第五层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E5%9F%BA%E7%A1%80%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.1.1.</span> <span class="toc-text">（一）基础协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81DHCP%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">1、DHCP动态主机配置协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%B8%8D%E5%9C%A8%E5%90%8C%E4%B8%80%E4%B8%AA%E9%93%BE%E8%B7%AF"><span class="toc-number">1.1.1.1.1.</span> <span class="toc-text">（1）不在同一个链路</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81MQTT%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">2、MQTT协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%AE%89%E5%85%A8%E4%BF%9D%E8%AF%81"><span class="toc-number">1.1.1.2.1.</span> <span class="toc-text">（1）安全保证</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%B8%8EHTTP%E5%AF%B9%E6%AF%94"><span class="toc-number">1.1.1.2.2.</span> <span class="toc-text">（2）与HTTP对比</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E2%91%A0%E6%A0%B8%E5%BF%83%E8%81%8C%E8%83%BD%E5%AF%B9%E6%AF%94"><span class="toc-number">1.1.1.2.2.1.</span> <span class="toc-text">①核心职能对比</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E2%91%A1%E6%8A%80%E6%9C%AF%E7%89%B9%E6%80%A7%E5%AF%B9%E6%AF%94"><span class="toc-number">1.1.1.2.2.2.</span> <span class="toc-text">②技术特性对比</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E2%91%A2%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94"><span class="toc-number">1.1.1.2.2.3.</span> <span class="toc-text">③性能对比</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E5%BA%94%E7%94%A8"><span class="toc-number">1.1.1.2.3.</span> <span class="toc-text">（3）应用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89%E6%89%A9%E5%B1%95%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.1.2.</span> <span class="toc-text">（二）扩展协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81WebSocket"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">1、WebSocket</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%92%8CHTTP%E5%8C%BA%E5%88%AB"><span class="toc-number">1.1.2.1.1.</span> <span class="toc-text">（1）和HTTP区别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E7%94%A8%E6%88%B7%E4%B8%8D%E6%93%8D%E4%BD%9C%EF%BC%8CHTTP%E7%BD%91%E9%A1%B5%E5%A6%82%E4%BD%95%E6%94%B6%E5%88%B0%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B6%88%E6%81%AF"><span class="toc-number">1.1.2.1.2.</span> <span class="toc-text">（2）用户不操作，HTTP网页如何收到服务端消息</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81RPC%E6%8A%80%E6%9C%AF"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">2、RPC技术</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E7%94%A8%E9%80%94"><span class="toc-number">1.1.2.2.1.</span> <span class="toc-text">（1）用途</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%B8%8EHTTP%E5%8C%BA%E5%88%AB"><span class="toc-number">1.1.2.2.2.</span> <span class="toc-text">（2）与HTTP区别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%883%EF%BC%89gRPC"><span class="toc-number">1.1.2.2.3.</span> <span class="toc-text">（3）gRPC</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BC%A0%E8%BE%93%E5%B1%82%E2%80%94%E2%80%94%E7%AC%AC%E5%9B%9B%E5%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">二、传输层——第四层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89UDP%EF%BC%88%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E6%8A%A5%E5%8D%8F%E8%AE%AE%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">（一）UDP（用户数据报协议）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E5%92%8CTCP%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">1、和TCP的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81UDP%E5%AF%B9%E5%BA%94%E7%9A%84%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">2、UDP对应的应用层协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E5%9C%A8%E8%BF%9B%E8%A1%8CUDP%E7%BC%96%E7%A8%8B%EF%BC%8C%E4%B8%80%E6%AC%A1%E5%8F%91%E9%80%81%E5%A4%9A%E5%B0%91%E5%AD%97%E8%8A%82%E5%A5%BD"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">3、在进行UDP编程，一次发送多少字节好</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96UDP%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="toc-number">1.2.1.4.</span> <span class="toc-text">4、如何优化UDP可靠性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%BD%91%E7%BB%9C%E5%B1%82%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%89%E5%B1%82"><span class="toc-number">1.3.</span> <span class="toc-text">三、网络层——第三层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E5%8A%9F%E8%83%BD"><span class="toc-number">1.3.1.</span> <span class="toc-text">（一）功能</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E5%AF%BB%E5%9D%80"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">1、寻址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E8%B7%AF%E7%94%B1"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">2、路由</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.2.</span> <span class="toc-text">（二）协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81NAT%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">1、NAT网络地址转换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81ICMP%E4%BA%92%E8%81%94%E7%BD%91%E6%8E%A7%E5%88%B6%E6%8A%A5%E6%96%87%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">2、ICMP互联网控制报文协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%8A%A5%E6%96%87%E5%88%86%E7%B1%BB"><span class="toc-number">1.3.2.2.1.</span> <span class="toc-text">（1）报文分类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%882%EF%BC%89Ping%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.2.2.2.</span> <span class="toc-text">（2）Ping原理</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81IGMP%E4%BA%92%E8%81%94%E7%BD%91%E7%BB%84%E7%AE%A1%E7%90%86%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">3、IGMP互联网组管理协议</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%EF%BC%88%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3%E5%B1%82%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%BA%8C%E5%B1%82"><span class="toc-number">1.4.</span> <span class="toc-text">四、数据链路层（网络接口层）——第二层</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91"><span class="toc-number">1.4.0.0.0.1.</span> <span class="toc-text">以太网</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.4.1.</span> <span class="toc-text">（一）协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81RARP"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">1、RARP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.1.1.1.</span> <span class="toc-text">原理</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%89%A9%E7%90%86%E5%B1%82%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E5%B1%82"><span class="toc-number">1.5.</span> <span class="toc-text">五、物理层——第一层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%8A%8ATCP-IP%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%88%86%E6%88%905%E5%B1%82%EF%BC%88%E6%88%967%E5%B1%82%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">六、为什么要把TCP&#x2F;IP协议栈分成5层（或7层）</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/my_tech_blog.github.io/2025/11/09/%E5%9C%BA%E6%99%AF%E9%A2%98_1/" title="场景题（一）">场景题（一）</a><time datetime="2025-11-08T16:07:01.000Z" title="发表于 2025-11-09 00:07:01">2025-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/my_tech_blog.github.io/2025/11/09/%E9%9D%A2%E7%BB%8F_1/" title="面经（一）：华为">面经（一）：华为</a><time datetime="2025-11-08T16:07:01.000Z" title="发表于 2025-11-09 00:07:01">2025-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/my_tech_blog.github.io/2025/11/09/Redis_5/" title="Redis(五)：应用四分布式锁">Redis(五)：应用四分布式锁</a><time datetime="2025-11-08T16:06:05.000Z" title="发表于 2025-11-09 00:06:05">2025-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/my_tech_blog.github.io/2025/11/09/Redis_4/" title="Redis(四)：应用三消息队列">Redis(四)：应用三消息队列</a><time datetime="2025-11-08T16:06:04.000Z" title="发表于 2025-11-09 00:06:04">2025-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/my_tech_blog.github.io/2025/11/09/Redis_3/" title="Redis(三)：应用二会话管理">Redis(三)：应用二会话管理</a><time datetime="2025-11-08T16:06:03.000Z" title="发表于 2025-11-09 00:06:03">2025-11-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By JT</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/my_tech_blog.github.io/js/utils.js?v=5.5.2"></script><script src="/my_tech_blog.github.io/js/main.js?v=5.5.2"></script><div class="js-pjax"></div><script>
+  // 手动替换公告内容
+  document.addEventListener('DOMContentLoaded', function() {
+    const announcement = document.querySelector('.card-announcement');
+    if (announcement) {
+      announcement.innerHTML = `
+        <div class="card-content">
+          <div class="content">
+            <strong>🚀 欢迎访问我的技术博客！</strong><br>
+            📚 <strong>技术栈涵盖</strong>：<br>
+            - C++ <br>
+            - 计算机网络<br>
+            - 操作系统<br>
+            - 数据库<br>
+            - Redis<br>
+            - 场景题<br>
+            - 面经<br>
+            💡 <strong>博客特色</strong>：<br>
+            • 面试宝典<br>
+            ⏰ 更新时间：随我心意~
+          </div>
+        </div>
+      `;
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 更强大的统计替换函数
+    function replaceStats() {
+      // 多种可能的选择器
+      const visitorSelectors = [
+        '.busuanzi_value_site_uv',
+        '#busuanzi_value_site_uv',
+        '.site-visitors .length-num',
+        '[id*="visitor"]',
+        '[class*="visitor"]'
+      ];
+      
+      const viewSelectors = [
+        '.busuanzi_value_site_pv', 
+        '#busuanzi_value_site_pv',
+        '.site-views .length-num',
+        '[id*="view"]',
+        '[class*="view"]'
+      ];
+      
+      // 查找并替换访客数
+      visitorSelectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+          if (el.textContent === '' || el.textContent.includes('加载') || el.textContent === '0') {
+            el.textContent = '6666';
+            el.style.opacity = '1';
+          }
+        });
+      });
+      
+      // 查找并替换浏览量
+      viewSelectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+          if (el.textContent === '' || el.textContent.includes('加载') || el.textContent === '0') {
+            el.textContent = '8888';
+            el.style.opacity = '1';
+          }
+        });
+      });
+      
+      // 直接通过文本内容查找
+      const infoCard = document.querySelector('.card-widget.card-webinfo');
+      if (infoCard) {
+        const html = infoCard.innerHTML;
+        if (html.includes('本站访客数') && html.includes('加载中')) {
+          infoCard.innerHTML = html.replace(/本站访客数[^<]*加载中[^<]*/, '本站访客数 : 6666')
+                                   .replace(/本站总浏览量[^<]*加载中[^<]*/, '本站总浏览量 : 8888');
+        }
+      }
+    }
+    
+    // 立即执行一次
+    replaceStats();
+    
+    // 延迟再次执行确保覆盖
+    setTimeout(replaceStats, 500);
+    setTimeout(replaceStats, 2000);
+    
+    // 监听DOM变化
+    const observer = new MutationObserver(replaceStats);
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+</script>
+<script async data-pjax src="/my_tech_blog.github.io/"></script></div></body></html>
